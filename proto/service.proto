@@ -11,9 +11,10 @@ message MsgTransactionInfoRequest {
 }
 
 message MsgTransactionInfoResponse {
-  string tokenMint = 1;
+  // Collection address on current chain
+  string collection = 1;
   string tokenId = 2;
-  string collection = 3;
-  string targetNetwork = 4;
-  string receiver = 5;
+  string targetNetwork = 3;
+  // Address on target chain
+  string receiver = 4;
 }
