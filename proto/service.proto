@@ -15,7 +15,8 @@ enum type {
   ERC20 = 1;
   ERC721 = 2;
   ERC1155 = 3;
-  METAPLEX = 4;
+  METAPLEX_NFT = 4;
+  METAPLEX_FT = 5;
 }
 
 message MsgTransactionInfoResponse {
