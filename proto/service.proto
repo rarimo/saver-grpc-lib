@@ -10,6 +10,14 @@ message MsgTransactionInfoRequest {
   string hash = 1;
 }
 
+enum type {
+  NATIVE = 0;
+  ERC20 = 1;
+  ERC721 = 2;
+  ERC1155 = 3;
+  METAPLEX = 4;
+}
+
 message MsgTransactionInfoResponse {
   // Collection address on current chain
   string collection = 1;
@@ -17,4 +25,5 @@ message MsgTransactionInfoResponse {
   string targetNetwork = 3;
   // Address on target chain
   string receiver = 4;
+  type tokenType = 5;
 }
