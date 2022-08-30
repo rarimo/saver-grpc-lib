@@ -3,28 +3,79 @@ syntax = "proto3";
 option go_package = "gitlab.com/rarify-protocol/saver-grpc-lib/grpc";
 
 service Saver {
-  rpc GetTransactionInfo(MsgTransactionInfoRequest) returns (MsgTransactionInfoResponse);
+  rpc GetNativeDepositInfo(MsgTransactionInfoRequest) returns (MsgNativeDepositResponse);
+  rpc GetFTDepositInfo(MsgTransactionInfoRequest) returns (MsgFTDepositResponse);
+  rpc GetNFTDepositInfo(MsgTransactionInfoRequest) returns (MsgNFTDepositResponse);
+
+  rpc GetNativeWithdrawInfo(MsgTransactionInfoRequest) returns (MsgNativeWithdrawResponse);
+  rpc GetFTWithdrawInfo(MsgTransactionInfoRequest) returns (MsgFTWithdrawResponse);
+  rpc GetNFTWithdrawInfo(MsgTransactionInfoRequest) returns (MsgNFTWithdrawResponse);
 }
 
 message MsgTransactionInfoRequest {
   string hash = 1;
 }
 
-enum type {
-  NATIVE = 0;
-  ERC20 = 1;
-  ERC721 = 2;
-  ERC1155 = 3;
-  METAPLEX_NFT = 4;
-  METAPLEX_FT = 5;
+message MsgNativeDepositResponse {
+  string targetNetwork = 1;
+  string sender = 2;
+  string receiver = 3;
+  // big.Int bytes
+  bytes amount = 4;
 }
 
-message MsgTransactionInfoResponse {
-  // Collection address on current chain
-  string collection = 1;
-  string tokenId = 2;
-  string targetNetwork = 3;
-  // Address on target chain
+message MsgFTDepositResponse {
+  string targetNetwork = 1;
+  string sender = 2;
+  string receiver = 3;
+  // big.Int bytes
+  bytes amount = 4;
+  // ERC721//1155 contract or Solana mint address
+  string tokenAddress = 6;
+  // ERC1155 token id
+  string tokenId = 7;
+}
+
+message MsgNFTDepositResponse {
+  string targetNetwork = 1;
+  string sender = 2;
+  string receiver = 3;
+  // ERC721//1155 contract or Solana collection address
+  string tokenAddress = 5;
+  // ERC721//1155 token id or Solana mint address
+  string tokenId = 6;
+
+}
+
+message MsgNativeWithdrawResponse {
+  string tx = 1;
+  string eventId = 2;
+  string networkFrom = 3;
   string receiver = 4;
-  type tokenType = 5;
+  // big.Int bytes
+  bytes amount = 5;
+}
+
+message MsgFTWithdrawResponse {
+  string tx = 1;
+  string eventId = 2;
+  string networkFrom = 3;
+  string receiver = 4;
+  // big.Int bytes
+  bytes amount = 5;
+  // ERC721//1155 contract or Solana mint address
+  string tokenAddress = 6;
+  // ERC1155 token id
+  string tokenId = 7;
+}
+
+message MsgNFTWithdrawResponse {
+  string tx = 1;
+  string eventId = 2;
+  string networkFrom = 3;
+  string receiver = 4;
+  // ERC721//1155 contract or Solana collection address
+  string tokenAddress = 5;
+  // ERC721//1155 token id or Solana mint address
+  string tokenId = 6;
 }
