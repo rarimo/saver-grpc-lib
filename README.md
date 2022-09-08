@@ -3,7 +3,7 @@
 For regenerating proto structures use:
 
 ```
-protoc ./proto/service.proto --gogofaster_out=GOPATH --go-grpc_out=GOPATH
+protoc ./proto/service.proto --gogofaster_out=GOPATH/src --go-grpc_out=GOPATH/src
 ```
 
 Proto compiler installation:
