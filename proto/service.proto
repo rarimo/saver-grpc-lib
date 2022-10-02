@@ -16,12 +16,20 @@ message MsgTransactionInfoRequest {
 
 message MsgDepositResponse {
   string targetNetwork = 1;
+  // hex-encoded
   string sender = 2;
+  // hex-encoded
   string receiver = 3;
   // dec-encoded
   string amount = 4;
+  // hex-encoded
   string tokenAddress = 6;
+  // hex-encoded
   string tokenId = 7;
+  // hex-encoded
+  string bundleData = 8;
+  // hex-encoded
+  string bundleSalt = 9;
 }
 
 message MsgWithdrawResponse {
