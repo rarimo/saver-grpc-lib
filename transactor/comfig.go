@@ -1,6 +1,7 @@
 package transactor
 
 import (
+	"context"
 	"crypto/ecdsa"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -15,6 +16,7 @@ import (
 	"gitlab.com/distributed_lab/figure"
 	"gitlab.com/distributed_lab/kit/comfig"
 	"gitlab.com/distributed_lab/kit/kv"
+	tokentypes "gitlab.com/rarify-protocol/rarimo-core/x/tokenmanager/types"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/keepalive"
@@ -28,7 +30,14 @@ type Transactorer interface {
 }
 
 type Transactor interface {
-	SubmitTransferOp() error
+	SubmitTransferOp(
+		ctx context.Context,
+		creator string,
+		txHash string,
+		eventId string,
+		fromChain string,
+		tokenType tokentypes.Type,
+	) error
 }
 
 type transactorer struct {
