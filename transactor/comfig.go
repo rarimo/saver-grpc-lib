@@ -12,7 +12,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/crypto"
 	"gitlab.com/distributed_lab/figure"
 	"gitlab.com/distributed_lab/kit/comfig"
 	"gitlab.com/distributed_lab/kit/kv"
@@ -63,7 +62,6 @@ func (c *transactorer) Transactor() Transactor {
 	return c.once.Do(func() interface{} {
 		var config struct {
 			RPC             string `fig:"rpc"`
-			PrivateKeyHex   string `fig:"prv_key_hex"`
 			SenderPrvKeyHex string `fig:"sender_prv_hex"`
 			ChainId         string `fig:"chain_id"`
 		}
@@ -80,11 +78,6 @@ func (c *transactorer) Transactor() Transactor {
 			panic(err)
 		}
 
-		prv, err := crypto.ToECDSA(hexutil.MustDecode(config.PrivateKeyHex))
-		if err != nil {
-			panic(err)
-		}
-
 		sender := &secp256k1.PrivKey{Key: hexutil.MustDecode(config.SenderPrvKeyHex)}
 
 		address, err := bech32.ConvertAndEncode(AccountPrefix, sender.PubKey().Address().Bytes())
@@ -93,7 +86,7 @@ func (c *transactorer) Transactor() Transactor {
 		}
 
 		return &transactor{
-			cfg:      transactorConfig{RPC: config.RPC, PrivateKey: prv, Sender: sender, SenderAddress: address, ChainId: config.ChainId},
+			cfg:      transactorConfig{RPC: config.RPC, Sender: sender, SenderAddress: address, ChainId: config.ChainId},
 			txConfig: tx.NewTxConfig(codec.NewProtoCodec(codectypes.NewInterfaceRegistry()), []signing.SignMode{signing.SignMode_SIGN_MODE_DIRECT}),
 			txclient: client.NewServiceClient(con),
 		}
