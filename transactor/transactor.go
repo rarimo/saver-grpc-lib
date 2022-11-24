@@ -111,7 +111,7 @@ func (t *transactor) broadcastTx(ctx context.Context, tx []byte) error {
 	}
 
 	if grpcRes.TxResponse.Code != SuccessTxCode {
-		return errors.New(fmt.Sprintf("Got error code: %d, info: %s", grpcRes.TxResponse.Code, grpcRes.TxResponse.Info))
+		return errors.New(fmt.Sprintf("Got error code: %d, info: %s, log: %s", grpcRes.TxResponse.Code, grpcRes.TxResponse.Info, grpcRes.TxResponse.RawLog))
 	}
 
 	return nil
