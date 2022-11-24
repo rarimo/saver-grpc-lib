@@ -2,7 +2,6 @@ package transactor
 
 import (
 	"context"
-	"crypto/ecdsa"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
@@ -32,7 +31,6 @@ type Transactorer interface {
 type Transactor interface {
 	SubmitTransferOp(
 		ctx context.Context,
-		creator string,
 		txHash string,
 		eventId string,
 		fromChain string,
@@ -52,8 +50,6 @@ func New(getter kv.Getter) Transactorer {
 }
 
 type transactorConfig struct {
-	RPC           string
-	PrivateKey    *ecdsa.PrivateKey
 	Sender        cryptotypes.PrivKey
 	SenderAddress string
 	ChainId       string
@@ -87,7 +83,7 @@ func (c *transactorer) Transactor() Transactor {
 		}
 
 		return &transactor{
-			cfg:      transactorConfig{RPC: config.RPC, Sender: sender, SenderAddress: address, ChainId: config.ChainId},
+			cfg:      transactorConfig{Sender: sender, SenderAddress: address, ChainId: config.ChainId},
 			txConfig: tx.NewTxConfig(codec.NewProtoCodec(codectypes.NewInterfaceRegistry()), []signing.SignMode{signing.SignMode_SIGN_MODE_DIRECT}),
 			txclient: client.NewServiceClient(con),
 			auth:     authtypes.NewQueryClient(con),

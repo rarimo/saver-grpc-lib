@@ -31,13 +31,12 @@ type transactor struct {
 
 func (t *transactor) SubmitTransferOp(
 	ctx context.Context,
-	creator string,
 	txHash string,
 	eventId string,
 	fromChain string,
 	tokenType tokentypes.Type,
 ) error {
-	msg := rarimocore.NewMsgCreateTransferOp(creator, txHash, eventId, fromChain, tokenType)
+	msg := rarimocore.NewMsgCreateTransferOp(t.cfg.SenderAddress, txHash, eventId, fromChain, tokenType)
 
 	tx, err := t.genTx(ctx, msg)
 	if err != nil {
