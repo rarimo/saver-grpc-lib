@@ -11,6 +11,7 @@ import (
 	client "github.com/cosmos/cosmos-sdk/types/tx"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"gitlab.com/distributed_lab/figure"
 	"gitlab.com/distributed_lab/kit/comfig"
@@ -89,6 +90,7 @@ func (c *transactorer) Transactor() Transactor {
 			cfg:      transactorConfig{RPC: config.RPC, Sender: sender, SenderAddress: address, ChainId: config.ChainId},
 			txConfig: tx.NewTxConfig(codec.NewProtoCodec(codectypes.NewInterfaceRegistry()), []signing.SignMode{signing.SignMode_SIGN_MODE_DIRECT}),
 			txclient: client.NewServiceClient(con),
+			auth:     authtypes.NewQueryClient(con),
 		}
 	}).(Transactor)
 }
