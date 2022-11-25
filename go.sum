@@ -694,6 +694,8 @@ gitlab.com/distributed_lab/logan v3.8.1+incompatible/go.mod h1:25oL/FPFXmyYzWeA6
 gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c/go.mod h1:4TnADX84dQjQMRHKIMPCVL0L97rD/Jxv0xDbrN6aKzk=
 gitlab.com/rarify-protocol/go-merkle v0.0.0-20220831221733-8f4135fe9f1f h1:BodYvdcDw7hFsgYf6OEnixmckKGoqyILTZoqwQetmZs=
 gitlab.com/rarify-protocol/go-merkle v0.0.0-20220831221733-8f4135fe9f1f/go.mod h1:n+k8vkNffvSzX41qNeBQYvlBaFFUPEo8WJP/Ie+fXSQ=
+gitlab.com/rarify-protocol/rarimo-core v0.0.0-20221102125227-d38b7f9364c8 h1:ZS8rbzbhl0o6q5vUJBhUcfbFxWwPh5+pgSwt9vxRLjk=
+gitlab.com/rarify-protocol/rarimo-core v0.0.0-20221102125227-d38b7f9364c8/go.mod h1:WMo2lV3JJkQqxqNrs2cLs66KYKaL7Y80IajaCT0KhN0=
 gitlab.com/rarify-protocol/rarimo-core v0.0.0-20221109132133-b580d0efda3f h1:8WvGUV8c1WgNmI3wAYsHrhCLnCAqvFJPEAv737/jBBM=
 gitlab.com/rarify-protocol/rarimo-core v0.0.0-20221109132133-b580d0efda3f/go.mod h1:WMo2lV3JJkQqxqNrs2cLs66KYKaL7Y80IajaCT0KhN0=
 go.etcd.io/bbolt v1.3.6 h1:/ecaJf0sk1l4l6V4awd65v2C3ILy7MSj+s/x1ADCIMU=
