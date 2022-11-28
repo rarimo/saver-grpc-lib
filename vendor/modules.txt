@@ -33,10 +33,6 @@ github.com/bgentry/speakeasy
 # github.com/btcsuite/btcd v0.22.1
 ## explicit; go 1.17
 github.com/btcsuite/btcd/btcec
-# github.com/btcsuite/btcd/btcec/v2 v2.2.0
-## explicit; go 1.17
-github.com/btcsuite/btcd/btcec/v2
-github.com/btcsuite/btcd/btcec/v2/ecdsa
 # github.com/cespare/xxhash v1.1.0
 ## explicit
 github.com/cespare/xxhash
@@ -151,10 +147,6 @@ github.com/danieljoos/wincred
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
-# github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1
-## explicit; go 1.16
-github.com/decred/dcrd/dcrec/secp256k1/v4
-github.com/decred/dcrd/dcrec/secp256k1/v4/ecdsa
 # github.com/dgraph-io/badger/v2 v2.2007.4
 ## explicit; go 1.12
 github.com/dgraph-io/badger/v2
@@ -187,16 +179,7 @@ github.com/dvsekhvalnov/jose2go/keys/ecc
 github.com/dvsekhvalnov/jose2go/padding
 # github.com/ethereum/go-ethereum v1.10.26
 ## explicit; go 1.17
-github.com/ethereum/go-ethereum/common
 github.com/ethereum/go-ethereum/common/hexutil
-github.com/ethereum/go-ethereum/common/math
-github.com/ethereum/go-ethereum/crypto
-github.com/ethereum/go-ethereum/crypto/secp256k1
-github.com/ethereum/go-ethereum/crypto/secp256k1/libsecp256k1/include
-github.com/ethereum/go-ethereum/crypto/secp256k1/libsecp256k1/src
-github.com/ethereum/go-ethereum/crypto/secp256k1/libsecp256k1/src/modules/recovery
-github.com/ethereum/go-ethereum/rlp
-github.com/ethereum/go-ethereum/rlp/internal/rlpstruct
 # github.com/fsnotify/fsnotify v1.5.4
 ## explicit; go 1.16
 github.com/fsnotify/fsnotify
@@ -526,14 +509,6 @@ gitlab.com/distributed_lab/logan/v3/hook/sentry
 # gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c
 ## explicit
 gitlab.com/distributed_lab/running
-# gitlab.com/rarify-protocol/go-merkle v0.0.0-20220831221733-8f4135fe9f1f
-## explicit; go 1.18
-gitlab.com/rarify-protocol/go-merkle
-# gitlab.com/rarify-protocol/rarimo-core v0.0.0-20221102125227-d38b7f9364c8
-## explicit; go 1.18
-gitlab.com/rarify-protocol/rarimo-core/x/rarimocore/crypto
-gitlab.com/rarify-protocol/rarimo-core/x/rarimocore/types
-gitlab.com/rarify-protocol/rarimo-core/x/tokenmanager/types
 # gitlab.com/rarimo/broadcaster-svc v0.0.0-20221128120056-b5841e0cb300
 ## explicit; go 1.19
 gitlab.com/rarimo/broadcaster-svc/grpc
@@ -562,7 +537,6 @@ golang.org/x/crypto/openpgp/errors
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/ripemd160
 golang.org/x/crypto/salsa20/salsa
-golang.org/x/crypto/sha3
 # golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
 ## explicit; go 1.18
 golang.org/x/exp/constraints
