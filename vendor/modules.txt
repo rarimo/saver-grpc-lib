@@ -17,6 +17,9 @@ github.com/99designs/keyring
 # github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d
 ## explicit; go 1.13
 github.com/ChainSafe/go-schnorrkel
+# github.com/Masterminds/squirrel v1.4.0
+## explicit
+github.com/Masterminds/squirrel
 # github.com/armon/go-metrics v0.4.0
 ## explicit; go 1.12
 github.com/armon/go-metrics
@@ -30,6 +33,10 @@ github.com/bgentry/speakeasy
 # github.com/btcsuite/btcd v0.22.1
 ## explicit; go 1.17
 github.com/btcsuite/btcd/btcec
+# github.com/btcsuite/btcd/btcec/v2 v2.2.0
+## explicit; go 1.17
+github.com/btcsuite/btcd/btcec/v2
+github.com/btcsuite/btcd/btcec/v2/ecdsa
 # github.com/cespare/xxhash v1.1.0
 ## explicit
 github.com/cespare/xxhash
@@ -54,7 +61,6 @@ github.com/cosmos/cosmos-sdk/client/grpc/reflection
 github.com/cosmos/cosmos-sdk/client/grpc/tmservice
 github.com/cosmos/cosmos-sdk/client/input
 github.com/cosmos/cosmos-sdk/client/rpc
-github.com/cosmos/cosmos-sdk/client/tx
 github.com/cosmos/cosmos-sdk/codec
 github.com/cosmos/cosmos-sdk/codec/legacy
 github.com/cosmos/cosmos-sdk/codec/types
@@ -145,6 +151,10 @@ github.com/danieljoos/wincred
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
+# github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1
+## explicit; go 1.16
+github.com/decred/dcrd/dcrec/secp256k1/v4
+github.com/decred/dcrd/dcrec/secp256k1/v4/ecdsa
 # github.com/dgraph-io/badger/v2 v2.2007.4
 ## explicit; go 1.12
 github.com/dgraph-io/badger/v2
@@ -175,8 +185,8 @@ github.com/dvsekhvalnov/jose2go/compact
 github.com/dvsekhvalnov/jose2go/kdf
 github.com/dvsekhvalnov/jose2go/keys/ecc
 github.com/dvsekhvalnov/jose2go/padding
-# github.com/ethereum/go-ethereum v1.9.25
-## explicit; go 1.13
+# github.com/ethereum/go-ethereum v1.10.26
+## explicit; go 1.17
 github.com/ethereum/go-ethereum/common
 github.com/ethereum/go-ethereum/common/hexutil
 github.com/ethereum/go-ethereum/common/math
@@ -186,6 +196,7 @@ github.com/ethereum/go-ethereum/crypto/secp256k1/libsecp256k1/include
 github.com/ethereum/go-ethereum/crypto/secp256k1/libsecp256k1/src
 github.com/ethereum/go-ethereum/crypto/secp256k1/libsecp256k1/src/modules/recovery
 github.com/ethereum/go-ethereum/rlp
+github.com/ethereum/go-ethereum/rlp/internal/rlpstruct
 # github.com/fsnotify/fsnotify v1.5.4
 ## explicit; go 1.16
 github.com/fsnotify/fsnotify
@@ -206,6 +217,8 @@ github.com/go-kit/log/term
 # github.com/go-logfmt/logfmt v0.5.1
 ## explicit; go 1.17
 github.com/go-logfmt/logfmt
+# github.com/go-sql-driver/mysql v1.6.0
+## explicit; go 1.10
 # github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2
 ## explicit; go 1.12
 github.com/godbus/dbus
@@ -266,6 +279,8 @@ github.com/gtank/ristretto255/internal/scalar
 # github.com/hashicorp/go-immutable-radix v1.3.1
 ## explicit
 github.com/hashicorp/go-immutable-radix
+# github.com/hashicorp/go-uuid v1.0.1
+## explicit
 # github.com/hashicorp/golang-lru v0.5.5-0.20210104140557-80c98217689d
 ## explicit; go 1.12
 github.com/hashicorp/golang-lru
@@ -291,6 +306,10 @@ github.com/inconshreveable/mousetrap
 # github.com/jmhodges/levigo v1.0.0
 ## explicit
 github.com/jmhodges/levigo
+# github.com/jmoiron/sqlx v1.2.0
+## explicit
+github.com/jmoiron/sqlx
+github.com/jmoiron/sqlx/reflectx
 # github.com/klauspost/compress v1.15.11
 ## explicit; go 1.17
 github.com/klauspost/compress
@@ -300,6 +319,19 @@ github.com/klauspost/compress/internal/cpuinfo
 github.com/klauspost/compress/internal/snapref
 github.com/klauspost/compress/zstd
 github.com/klauspost/compress/zstd/internal/xxhash
+# github.com/kr/pretty v0.3.1
+## explicit; go 1.12
+# github.com/lann/builder v0.0.0-20180802200727-47ae307949d0
+## explicit
+github.com/lann/builder
+# github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0
+## explicit
+github.com/lann/ps
+# github.com/lib/pq v1.10.7
+## explicit; go 1.13
+github.com/lib/pq
+github.com/lib/pq/oid
+github.com/lib/pq/scram
 # github.com/libp2p/go-buffer-pool v0.1.0
 ## explicit; go 1.17
 github.com/libp2p/go-buffer-pool
@@ -309,6 +341,8 @@ github.com/magiconair/properties
 # github.com/mattn/go-isatty v0.0.16
 ## explicit; go 1.15
 github.com/mattn/go-isatty
+# github.com/mattn/go-sqlite3 v1.14.15
+## explicit; go 1.16
 # github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369
 ## explicit; go 1.9
 github.com/matttproud/golang_protobuf_extensions/pbutil
@@ -482,20 +516,30 @@ gitlab.com/distributed_lab/figure
 ## explicit; go 1.14
 gitlab.com/distributed_lab/kit/comfig
 gitlab.com/distributed_lab/kit/kv
+gitlab.com/distributed_lab/kit/pgdb
 # gitlab.com/distributed_lab/logan v3.8.1+incompatible
 ## explicit
 gitlab.com/distributed_lab/logan/v3
 gitlab.com/distributed_lab/logan/v3/errors
 gitlab.com/distributed_lab/logan/v3/fields
 gitlab.com/distributed_lab/logan/v3/hook/sentry
+# gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c
+## explicit
+gitlab.com/distributed_lab/running
 # gitlab.com/rarify-protocol/go-merkle v0.0.0-20220831221733-8f4135fe9f1f
 ## explicit; go 1.18
 gitlab.com/rarify-protocol/go-merkle
-# gitlab.com/rarify-protocol/rarimo-core v0.0.0-20221109132133-b580d0efda3f
+# gitlab.com/rarify-protocol/rarimo-core v0.0.0-20221102125227-d38b7f9364c8
 ## explicit; go 1.18
 gitlab.com/rarify-protocol/rarimo-core/x/rarimocore/crypto
 gitlab.com/rarify-protocol/rarimo-core/x/rarimocore/types
 gitlab.com/rarify-protocol/rarimo-core/x/tokenmanager/types
+# gitlab.com/rarimo/broadcaster-svc v0.0.0-20221128120056-b5841e0cb300
+## explicit; go 1.19
+gitlab.com/rarimo/broadcaster-svc/grpc
+gitlab.com/rarimo/broadcaster-svc/internal/config
+gitlab.com/rarimo/broadcaster-svc/internal/data
+gitlab.com/rarimo/broadcaster-svc/internal/data/pg
 # go.etcd.io/bbolt v1.3.6
 ## explicit; go 1.12
 go.etcd.io/bbolt
@@ -642,6 +686,8 @@ google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/fieldmaskpb
 google.golang.org/protobuf/types/known/timestamppb
 google.golang.org/protobuf/types/known/wrapperspb
+# gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
+## explicit; go 1.11
 # gopkg.in/ini.v1 v1.67.0
 ## explicit
 gopkg.in/ini.v1
