@@ -45,7 +45,7 @@ func (c *broadcasterer) Broadcaster() Broadcaster {
 			Addr string `fig:"addr"`
 		}
 
-		if err := figure.Out(&config).From(kv.MustGetStringMap(c.getter, "transactor")).Please(); err != nil {
+		if err := figure.Out(&config).From(kv.MustGetStringMap(c.getter, "broadcaster")).Please(); err != nil {
 			panic(err)
 		}
 
