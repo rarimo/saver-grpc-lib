@@ -10,6 +10,11 @@ import (
 type broadcaster struct {
 	cli      broadcasterclient.BroadcasterClient
 	txConfig sdkclient.TxConfig
+	sender   string
+}
+
+func (t *broadcaster) Sender() string {
+	return t.sender
 }
 
 func (t *broadcaster) BroadcastTx(

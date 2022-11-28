@@ -26,6 +26,7 @@ type Broadcaster interface {
 		ctx context.Context,
 		msgs ...sdk.Msg,
 	) error
+	Sender() string
 }
 
 type broadcasterer struct {
@@ -42,7 +43,8 @@ func New(getter kv.Getter) Broadcasterer {
 func (c *broadcasterer) Broadcaster() Broadcaster {
 	return c.once.Do(func() interface{} {
 		var config struct {
-			Addr string `fig:"addr"`
+			Addr   string `fig:"addr"`
+			Sender string `fig:"sender"`
 		}
 
 		if err := figure.Out(&config).From(kv.MustGetStringMap(c.getter, "broadcaster")).Please(); err != nil {
@@ -58,6 +60,7 @@ func (c *broadcasterer) Broadcaster() Broadcaster {
 		}
 
 		return &broadcaster{
+			sender:   config.Sender,
 			txConfig: tx.NewTxConfig(codec.NewProtoCodec(codectypes.NewInterfaceRegistry()), []signing.SignMode{signing.SignMode_SIGN_MODE_DIRECT}),
 			cli:      broadcasterclient.NewBroadcasterClient(con),
 		}
