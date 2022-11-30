@@ -7,9 +7,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"gitlab.com/distributed_lab/figure"
 	"gitlab.com/distributed_lab/kit/comfig"
 	"gitlab.com/distributed_lab/kit/kv"
+	"gitlab.com/distributed_lab/logan/v3/errors"
 	broadcasterclient "gitlab.com/rarimo/broadcaster-svc/grpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -43,12 +45,12 @@ func New(getter kv.Getter) Broadcasterer {
 func (c *broadcasterer) Broadcaster() Broadcaster {
 	return c.once.Do(func() interface{} {
 		var config struct {
-			Addr   string `fig:"addr"`
-			Sender string `fig:"sender"`
+			Addr               string `fig:"addr"`
+			SenderPublicKeyHex string `fig:"sender_public_key_hex"`
 		}
 
 		if err := figure.Out(&config).From(kv.MustGetStringMap(c.getter, "broadcaster")).Please(); err != nil {
-			panic(err)
+			panic(errors.Wrap(err, "failed to figure out broadcaster config"))
 		}
 
 		con, err := grpc.Dial(config.Addr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithKeepaliveParams(keepalive.ClientParameters{
@@ -56,13 +58,18 @@ func (c *broadcasterer) Broadcaster() Broadcaster {
 			Timeout: 20 * time.Second, // ping timeout
 		}))
 		if err != nil {
-			panic(err)
+			panic(errors.Wrap(err, "failed to dial broadcaster rpc"))
+		}
+
+		senderPubKey, err := hexutil.Decode(config.SenderPublicKeyHex)
+		if err != nil {
+			panic(errors.Wrap(err, "failed to decode sender public key"))
 		}
 
 		return &broadcaster{
-			sender:   config.Sender,
-			txConfig: tx.NewTxConfig(codec.NewProtoCodec(codectypes.NewInterfaceRegistry()), []signing.SignMode{signing.SignMode_SIGN_MODE_DIRECT}),
-			cli:      broadcasterclient.NewBroadcasterClient(con),
+			senderPublicKey: string(senderPubKey),
+			txConfig:        tx.NewTxConfig(codec.NewProtoCodec(codectypes.NewInterfaceRegistry()), []signing.SignMode{signing.SignMode_SIGN_MODE_DIRECT}),
+			cli:             broadcasterclient.NewBroadcasterClient(con),
 		}
 	}).(Broadcaster)
 }

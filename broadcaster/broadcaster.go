@@ -8,13 +8,13 @@ import (
 )
 
 type broadcaster struct {
-	cli      broadcasterclient.BroadcasterClient
-	txConfig sdkclient.TxConfig
-	sender   string
+	cli             broadcasterclient.BroadcasterClient
+	txConfig        sdkclient.TxConfig
+	senderPublicKey string
 }
 
 func (t *broadcaster) Sender() string {
-	return t.sender
+	return t.senderPublicKey
 }
 
 func (t *broadcaster) BroadcastTx(
