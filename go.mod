@@ -4,9 +4,11 @@ go 1.18
 
 require (
 	github.com/cosmos/cosmos-sdk v0.46.6
+	github.com/ethereum/go-ethereum v1.10.26
 	github.com/gogo/protobuf v1.3.3
 	gitlab.com/distributed_lab/figure v2.1.0+incompatible
 	gitlab.com/distributed_lab/kit v1.11.1
+	gitlab.com/distributed_lab/logan v3.8.1+incompatible
 	gitlab.com/rarimo/broadcaster-svc v0.0.0-20221128120056-b5841e0cb300
 	google.golang.org/grpc v1.50.1
 )
@@ -41,7 +43,6 @@ require (
 	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13 // indirect
 	github.com/dustin/go-humanize v1.0.1-0.20200219035652-afde56e7acac // indirect
 	github.com/dvsekhvalnov/jose2go v1.5.0 // indirect
-	github.com/ethereum/go-ethereum v1.10.26 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/getsentry/sentry-go v0.7.0 // indirect
 	github.com/go-kit/kit v0.12.0 // indirect
@@ -109,7 +110,6 @@ require (
 	github.com/tendermint/tendermint v0.34.23 // indirect
 	github.com/tendermint/tm-db v0.6.7 // indirect
 	github.com/zondax/hid v0.9.1-0.20220302062450-5552068d2266 // indirect
-	gitlab.com/distributed_lab/logan v3.8.1+incompatible // indirect
 	gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c // indirect
 	go.etcd.io/bbolt v1.3.6 // indirect
 	golang.org/x/crypto v0.1.0 // indirect
