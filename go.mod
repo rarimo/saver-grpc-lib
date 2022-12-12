@@ -1,4 +1,4 @@
-module gitlab.com/rarify-protocol/saver-grpc-lib
+module gitlab.com/rarimo/savers/saver-grpc-lib
 
 go 1.18
 
