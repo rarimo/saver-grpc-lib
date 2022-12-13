@@ -1,4 +1,4 @@
-module gitlab.com/rarimo/savers/saver-grpc-lib
+module gitlab.com/rarimo/savers/saver-grpc-lib.git
 
 go 1.18
 
