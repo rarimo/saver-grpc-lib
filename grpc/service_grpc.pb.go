@@ -22,8 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SaverClient interface {
-	GetDepositInfo(ctx context.Context, in *MsgTransactionInfoRequest, opts ...grpc.CallOption) (*MsgDepositResponse, error)
-	GetWithdrawInfo(ctx context.Context, in *MsgTransactionInfoRequest, opts ...grpc.CallOption) (*MsgWithdrawResponse, error)
+	Revote(ctx context.Context, in *RevoteRequest, opts ...grpc.CallOption) (*MsgRevoteResponse, error)
 }
 
 type saverClient struct {
@@ -34,18 +33,9 @@ func NewSaverClient(cc grpc.ClientConnInterface) SaverClient {
 	return &saverClient{cc}
 }
 
-func (c *saverClient) GetDepositInfo(ctx context.Context, in *MsgTransactionInfoRequest, opts ...grpc.CallOption) (*MsgDepositResponse, error) {
-	out := new(MsgDepositResponse)
-	err := c.cc.Invoke(ctx, "/Saver/GetDepositInfo", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *saverClient) GetWithdrawInfo(ctx context.Context, in *MsgTransactionInfoRequest, opts ...grpc.CallOption) (*MsgWithdrawResponse, error) {
-	out := new(MsgWithdrawResponse)
-	err := c.cc.Invoke(ctx, "/Saver/GetWithdrawInfo", in, out, opts...)
+func (c *saverClient) Revote(ctx context.Context, in *RevoteRequest, opts ...grpc.CallOption) (*MsgRevoteResponse, error) {
+	out := new(MsgRevoteResponse)
+	err := c.cc.Invoke(ctx, "/Saver/Revote", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +46,7 @@ func (c *saverClient) GetWithdrawInfo(ctx context.Context, in *MsgTransactionInf
 // All implementations must embed UnimplementedSaverServer
 // for forward compatibility
 type SaverServer interface {
-	GetDepositInfo(context.Context, *MsgTransactionInfoRequest) (*MsgDepositResponse, error)
-	GetWithdrawInfo(context.Context, *MsgTransactionInfoRequest) (*MsgWithdrawResponse, error)
+	Revote(context.Context, *RevoteRequest) (*MsgRevoteResponse, error)
 	mustEmbedUnimplementedSaverServer()
 }
 
@@ -65,11 +54,8 @@ type SaverServer interface {
 type UnimplementedSaverServer struct {
 }
 
-func (UnimplementedSaverServer) GetDepositInfo(context.Context, *MsgTransactionInfoRequest) (*MsgDepositResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetDepositInfo not implemented")
-}
-func (UnimplementedSaverServer) GetWithdrawInfo(context.Context, *MsgTransactionInfoRequest) (*MsgWithdrawResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetWithdrawInfo not implemented")
+func (UnimplementedSaverServer) Revote(context.Context, *RevoteRequest) (*MsgRevoteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Revote not implemented")
 }
 func (UnimplementedSaverServer) mustEmbedUnimplementedSaverServer() {}
 
@@ -84,38 +70,20 @@ func RegisterSaverServer(s grpc.ServiceRegistrar, srv SaverServer) {
 	s.RegisterService(&Saver_ServiceDesc, srv)
 }
 
-func _Saver_GetDepositInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgTransactionInfoRequest)
+func _Saver_Revote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevoteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SaverServer).GetDepositInfo(ctx, in)
+		return srv.(SaverServer).Revote(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Saver/GetDepositInfo",
+		FullMethod: "/Saver/Revote",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SaverServer).GetDepositInfo(ctx, req.(*MsgTransactionInfoRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Saver_GetWithdrawInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgTransactionInfoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SaverServer).GetWithdrawInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/Saver/GetWithdrawInfo",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SaverServer).GetWithdrawInfo(ctx, req.(*MsgTransactionInfoRequest))
+		return srv.(SaverServer).Revote(ctx, req.(*RevoteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,12 +96,8 @@ var Saver_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*SaverServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetDepositInfo",
-			Handler:    _Saver_GetDepositInfo_Handler,
-		},
-		{
-			MethodName: "GetWithdrawInfo",
-			Handler:    _Saver_GetWithdrawInfo_Handler,
+			MethodName: "Revote",
+			Handler:    _Saver_Revote_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
