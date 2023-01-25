@@ -3,13 +3,13 @@ syntax = "proto3";
 option go_package = "gitlab.com/rarimo/savers/saver-grpc-lib/grpc";
 
 service Saver {
-  rpc Revote(RevoteRequest) returns (MsgRevoteResponse);
+  rpc Revote(RevoteRequest) returns (RevoteResponse);
 }
 
 message RevoteRequest {
   string operation = 1;
 }
 
-message MsgRevoteResponse {
+message RevoteResponse {
   string result = 2;
 }

@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SaverClient interface {
-	Revote(ctx context.Context, in *RevoteRequest, opts ...grpc.CallOption) (*MsgRevoteResponse, error)
+	Revote(ctx context.Context, in *RevoteRequest, opts ...grpc.CallOption) (*RevoteResponse, error)
 }
 
 type saverClient struct {
@@ -33,8 +33,8 @@ func NewSaverClient(cc grpc.ClientConnInterface) SaverClient {
 	return &saverClient{cc}
 }
 
-func (c *saverClient) Revote(ctx context.Context, in *RevoteRequest, opts ...grpc.CallOption) (*MsgRevoteResponse, error) {
-	out := new(MsgRevoteResponse)
+func (c *saverClient) Revote(ctx context.Context, in *RevoteRequest, opts ...grpc.CallOption) (*RevoteResponse, error) {
+	out := new(RevoteResponse)
 	err := c.cc.Invoke(ctx, "/Saver/Revote", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (c *saverClient) Revote(ctx context.Context, in *RevoteRequest, opts ...grp
 // All implementations must embed UnimplementedSaverServer
 // for forward compatibility
 type SaverServer interface {
-	Revote(context.Context, *RevoteRequest) (*MsgRevoteResponse, error)
+	Revote(context.Context, *RevoteRequest) (*RevoteResponse, error)
 	mustEmbedUnimplementedSaverServer()
 }
 
@@ -54,7 +54,7 @@ type SaverServer interface {
 type UnimplementedSaverServer struct {
 }
 
-func (UnimplementedSaverServer) Revote(context.Context, *RevoteRequest) (*MsgRevoteResponse, error) {
+func (UnimplementedSaverServer) Revote(context.Context, *RevoteRequest) (*RevoteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Revote not implemented")
 }
 func (UnimplementedSaverServer) mustEmbedUnimplementedSaverServer() {}
