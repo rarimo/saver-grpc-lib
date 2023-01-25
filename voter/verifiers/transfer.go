@@ -17,7 +17,7 @@ var (
 // ITransferOperator implements logic for transfer generation on every chain. Every saver should
 // implement it based on its chain peculiarities
 type ITransferOperator interface {
-	GetOperation(chain, tx, eventId string) (*rarimotypes.Transfer, error)
+	GetOperation(tx, eventId string) (*rarimotypes.Transfer, error)
 }
 
 type TransferVerifier struct {
@@ -45,7 +45,7 @@ func (t *TransferVerifier) Verify(operation rarimotypes.Operation) error {
 		return err
 	}
 
-	confirmedTransfer, err := t.GetOperation(transfer.From.Chain, transfer.Tx, transfer.EventId)
+	confirmedTransfer, err := t.GetOperation(transfer.Tx, transfer.EventId)
 	if err != nil {
 		return err
 	}
