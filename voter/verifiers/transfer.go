@@ -12,12 +12,13 @@ import (
 var (
 	ErrInvalidOperationType  = goerr.New("invalid operation type")
 	ErrWrongOperationContent = goerr.New("wrong operation content")
+	ErrUnsupportedNetwork    = goerr.New("unsupported network")
 )
 
 // ITransferOperator implements logic for transfer generation on every chain. Every saver should
 // implement it based on its chain peculiarities
 type ITransferOperator interface {
-	GetOperation(tx, eventId string) (*rarimotypes.Transfer, error)
+	VerifyTransfer(tx, eventId string, transfer *rarimotypes.Transfer) error
 }
 
 type TransferVerifier struct {
@@ -35,24 +36,24 @@ func NewTransferVerifier(operator ITransferOperator, log *logan.Entry) voter.IVe
 // Implements IVerifier
 var _ voter.IVerifier = &TransferVerifier{}
 
-func (t *TransferVerifier) Verify(operation rarimotypes.Operation) error {
+func (t *TransferVerifier) Verify(operation rarimotypes.Operation) (rarimotypes.VoteType, error) {
 	if operation.OperationType != rarimotypes.OpType_TRANSFER {
-		return ErrInvalidOperationType
+		return rarimotypes.VoteType_NO, ErrInvalidOperationType
 	}
 
 	transfer := new(rarimotypes.Transfer)
 	if err := proto.Unmarshal(operation.Details.Value, transfer); err != nil {
-		return err
+		return rarimotypes.VoteType_NO, err
 	}
 
-	confirmedTransfer, err := t.GetOperation(transfer.Tx, transfer.EventId)
-	if err != nil {
-		return err
+	switch err := t.VerifyTransfer(transfer.Tx, transfer.EventId, transfer); err {
+	case ErrUnsupportedNetwork:
+		return rarimotypes.VoteType_NO, ErrUnsupportedNetwork
+	case ErrWrongOperationContent:
+		return rarimotypes.VoteType_NO, nil
+	case nil:
+		return rarimotypes.VoteType_YES, nil
+	default:
+		return rarimotypes.VoteType_NO, err
 	}
-
-	if !proto.Equal(confirmedTransfer, transfer) {
-		return ErrWrongOperationContent
-	}
-
-	return nil
 }
