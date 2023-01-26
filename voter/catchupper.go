@@ -36,7 +36,7 @@ func (c *Catchupper) Run(ctx context.Context) {
 		}
 
 		for _, op := range operations.Operation {
-			if !op.Approved {
+			if op.Status == rarimotypes.OpStatus_INITIALIZED {
 				c.log.Infof("New unapproved operation found index=%s", op.Index)
 
 				_, err := rarimotypes.NewQueryClient(c.rarimo).Vote(ctx, &rarimotypes.QueryGetVoteRequest{Operation: op.Index, Validator: c.voter.Sender()})
