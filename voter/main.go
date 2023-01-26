@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"gitlab.com/distributed_lab/logan/v3"
-	"gitlab.com/rarify-protocol/saver-grpc-lib/broadcaster"
 	rarimotypes "gitlab.com/rarimo/rarimo-core/x/rarimocore/types"
+	"gitlab.com/rarimo/savers/saver-grpc-lib/broadcaster"
 	"google.golang.org/grpc"
 )
 

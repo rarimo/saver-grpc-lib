@@ -11,7 +11,6 @@ require (
 	gitlab.com/distributed_lab/figure v2.1.0+incompatible
 	gitlab.com/distributed_lab/kit v1.11.1
 	gitlab.com/distributed_lab/logan v3.8.1+incompatible
-	gitlab.com/rarify-protocol/saver-grpc-lib v0.0.0-20221130133422-c2d48a60561b
 	gitlab.com/rarimo/broadcaster-svc v0.0.0-20221130133449-dfacd1486515
 	gitlab.com/rarimo/rarimo-core v0.0.0-20230126114404-4d71e1a69768
 	google.golang.org/grpc v1.51.0

@@ -760,8 +760,6 @@ gitlab.com/distributed_lab/logan v3.8.1+incompatible h1:bYiP3P0AA0cpAL/fyOYWGq1a
 gitlab.com/distributed_lab/logan v3.8.1+incompatible/go.mod h1:25oL/FPFXmyYzWeA6vahMvnFJV8P7mOx0jZhRP7nhlc=
 gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c h1:cpIjV8C//7sLVvMcBaFGopI8sMcCw8Za7T0HIf52esU=
 gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c/go.mod h1:4TnADX84dQjQMRHKIMPCVL0L97rD/Jxv0xDbrN6aKzk=
-gitlab.com/rarify-protocol/saver-grpc-lib v0.0.0-20221130133422-c2d48a60561b h1:8qJFk+o6Urf+MiBhUgi6K5yXuBueW6K1lA0cwN+j1E8=
-gitlab.com/rarify-protocol/saver-grpc-lib v0.0.0-20221130133422-c2d48a60561b/go.mod h1:yFOplY+gbwtZqF9MTN1Sf6NIDvKM6WPTTZr3gnW9PX4=
 gitlab.com/rarimo/broadcaster-svc v0.0.0-20221130133449-dfacd1486515 h1:TNIHf2/50EpuMLBM4WP0/5IgQjeGmJIKl40r3iKhMRo=
 gitlab.com/rarimo/broadcaster-svc v0.0.0-20221130133449-dfacd1486515/go.mod h1:dqIQPbo4EaIofCrTiv97IUGxLtq9IJkLecuBpdRErIY=
 gitlab.com/rarimo/rarimo-core v0.0.0-20230124193148-09211e727395 h1:nZlbuOSWKHA2pTG8e5xKOLKQyeAsYFtNhueciQiM8Tw=
