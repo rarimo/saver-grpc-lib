@@ -6,23 +6,21 @@ import (
 	"gitlab.com/distributed_lab/logan/v3"
 	rarimotypes "gitlab.com/rarimo/rarimo-core/x/rarimocore/types"
 	"gitlab.com/rarimo/savers/saver-grpc-lib/broadcaster"
-	"google.golang.org/grpc"
 )
 
-type IVerifier interface {
+type Verifier interface {
 	Verify(operation rarimotypes.Operation) (rarimotypes.VoteType, error)
 }
 
 type Voter struct {
-	processors  map[rarimotypes.OpType]IVerifier
-	rarimo      *grpc.ClientConn
+	verifiers   map[rarimotypes.OpType]Verifier
 	broadcaster broadcaster.Broadcaster
 	log         *logan.Entry
 }
 
-func NewVoter(log *logan.Entry, broadcaster broadcaster.Broadcaster, processors map[rarimotypes.OpType]IVerifier) *Voter {
+func NewVoter(log *logan.Entry, broadcaster broadcaster.Broadcaster, verifiers map[rarimotypes.OpType]Verifier) *Voter {
 	return &Voter{
-		processors:  processors,
+		verifiers:   verifiers,
 		broadcaster: broadcaster,
 		log:         log,
 	}
@@ -31,10 +29,10 @@ func NewVoter(log *logan.Entry, broadcaster broadcaster.Broadcaster, processors 
 func (v *Voter) Process(ctx context.Context, operation rarimotypes.Operation) error {
 	v.log.Infof("Trying to verify operation: %s", operation.Index)
 
-	if processor, ok := v.processors[operation.OperationType]; ok {
+	if verifier, ok := v.verifiers[operation.OperationType]; ok {
 		v.log.Infof("Found verifier for op type: %s", operation.OperationType.String())
 
-		result, err := processor.Verify(operation)
+		result, err := verifier.Verify(operation)
 		if err != nil {
 			v.log.WithError(err).Errorf("Verification failed for operation: %s", operation.Index)
 			return nil

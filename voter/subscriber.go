@@ -41,17 +41,17 @@ func NewSubscriber(voter *Voter, client *http.HTTP, rarimo *grpc.ClientConn, que
 	}
 }
 
-func (o *Subscriber) Run() {
+func (s *Subscriber) Run(ctx context.Context) {
 	go func() {
 		for {
-			o.runner()
-			o.log.Info("Resubscribing to the pool...")
+			s.runner(ctx)
+			s.log.Info("Resubscribing to the pool...")
 		}
 	}()
 }
 
-func (o *Subscriber) runner() {
-	out, err := o.client.Subscribe(context.Background(), OpServiceName, o.query, OpPoolSize)
+func (s *Subscriber) runner(ctx context.Context) {
+	out, err := s.client.Subscribe(ctx, OpServiceName, s.query, OpPoolSize)
 	if err != nil {
 		panic(err)
 	}
@@ -59,23 +59,23 @@ func (o *Subscriber) runner() {
 	for {
 		c, ok := <-out
 		if !ok {
-			if err := o.client.Unsubscribe(context.Background(), OpServiceName, o.query); err != nil {
-				o.log.WithError(err).Error("Failed to unsubscribe from new operations")
+			if err := s.client.Unsubscribe(ctx, OpServiceName, s.query); err != nil {
+				s.log.WithError(err).Error("Failed to unsubscribe from new operations")
 			}
 			break
 		}
 
 		for _, index := range c.Events[fmt.Sprintf("%s.%s", rarimo.EventTypeNewOperation, rarimo.AttributeKeyOperationId)] {
-			o.log.Infof("New operation found index=%s", index)
+			s.log.Infof("New operation found index=%s", index)
 
-			op, err := rarimotypes.NewQueryClient(o.rarimo).Operation(context.TODO(), &rarimotypes.QueryGetOperationRequest{Index: index})
+			op, err := rarimotypes.NewQueryClient(s.rarimo).Operation(ctx, &rarimotypes.QueryGetOperationRequest{Index: index})
 			if err != nil {
-				o.log.WithError(err).Errorf("failed to fetch operation data, index = %s", index)
+				s.log.WithError(err).Errorf("failed to fetch operation data, index = %s", index)
 				continue
 			}
 
-			if err := o.voter.Process(context.TODO(), op.Operation); err != nil {
-				o.log.WithError(err).Errorf("failed to process operation, index = %s", index)
+			if err := s.voter.Process(ctx, op.Operation); err != nil {
+				s.log.WithError(err).Errorf("failed to process operation, index = %s", index)
 			}
 		}
 	}

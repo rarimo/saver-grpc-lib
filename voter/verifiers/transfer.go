@@ -15,26 +15,26 @@ var (
 	ErrUnsupportedNetwork    = goerr.New("unsupported network")
 )
 
-// ITransferOperator implements logic for transfer generation on every chain. Every saver should
+// TransferOperator implements logic for transfer generation on every chain. Every saver should
 // implement it based on its chain peculiarities
-type ITransferOperator interface {
+type TransferOperator interface {
 	VerifyTransfer(tx, eventId string, transfer *rarimotypes.Transfer) error
 }
 
 type TransferVerifier struct {
-	ITransferOperator
+	TransferOperator
 	log *logan.Entry
 }
 
-func NewTransferVerifier(operator ITransferOperator, log *logan.Entry) voter.IVerifier {
+func NewTransferVerifier(operator TransferOperator, log *logan.Entry) voter.Verifier {
 	return &TransferVerifier{
-		ITransferOperator: operator,
-		log:               log,
+		TransferOperator: operator,
+		log:              log,
 	}
 }
 
-// Implements IVerifier
-var _ voter.IVerifier = &TransferVerifier{}
+// Implements Verifier
+var _ voter.Verifier = &TransferVerifier{}
 
 func (t *TransferVerifier) Verify(operation rarimotypes.Operation) (rarimotypes.VoteType, error) {
 	if operation.OperationType != rarimotypes.OpType_TRANSFER {
@@ -46,14 +46,16 @@ func (t *TransferVerifier) Verify(operation rarimotypes.Operation) (rarimotypes.
 		return rarimotypes.VoteType_NO, err
 	}
 
-	switch err := t.VerifyTransfer(transfer.Tx, transfer.EventId, transfer); err {
-	case ErrUnsupportedNetwork:
-		return rarimotypes.VoteType_NO, ErrUnsupportedNetwork
-	case ErrWrongOperationContent:
-		return rarimotypes.VoteType_NO, nil
-	case nil:
-		return rarimotypes.VoteType_YES, nil
-	default:
-		return rarimotypes.VoteType_NO, err
+	if err := t.VerifyTransfer(transfer.Tx, transfer.EventId, transfer); err != nil {
+		switch err {
+		case ErrUnsupportedNetwork:
+			return rarimotypes.VoteType_NO, ErrUnsupportedNetwork
+		case ErrWrongOperationContent:
+			return rarimotypes.VoteType_NO, nil
+		default:
+			return rarimotypes.VoteType_NO, err
+		}
 	}
+
+	return rarimotypes.VoteType_YES, nil
 }

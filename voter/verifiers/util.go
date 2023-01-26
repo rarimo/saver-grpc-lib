@@ -49,7 +49,8 @@ func GetImage(metaUrl string) (url string, hash string, err error) {
 	return meta.Image, hash, nil
 }
 
-func GenerateTokenSeed(bridgeContract string) (seedStr string, idStr string) {
+// MustGenerateTokenSeed returns seed and id hex-encoded with leading 0x
+func MustGenerateTokenSeed(bridgeContract string) (string, string) {
 	programId := solana.PublicKeyFromBytes(hexutil.MustDecode(bridgeContract))
 
 	for {
@@ -60,21 +61,24 @@ func GenerateTokenSeed(bridgeContract string) (seedStr string, idStr string) {
 		}
 
 		key, _, err := solana.FindProgramAddress([][]byte{seed[:]}, programId)
-		if err == nil {
-			seedStr = hexutil.Encode(seed[:])
-			idStr = hexutil.Encode(key.Bytes())
-			return
+		if err != nil {
+			continue
 		}
+
+		return hexutil.Encode(seed[:]), hexutil.Encode(key.Bytes())
 	}
 }
 
-func VerifyTokenSeed(bridgeContract, tokenSeed string) bool {
-	programId := solana.PublicKeyFromBytes(hexutil.MustDecode(bridgeContract))
+func MustVerifyTokenSeed(bridgeContract, tokenSeed string) bool {
 	seed, err := hexutil.Decode(tokenSeed)
 	if err != nil {
 		return false
 	}
 
-	_, _, err = solana.FindProgramAddress([][]byte{seed}, programId)
+	_, _, err = solana.FindProgramAddress([][]byte{seed}, MustPublicKeyFromHexStr(bridgeContract))
 	return err == nil
+}
+
+func MustPublicKeyFromHexStr(programId string) solana.PublicKey {
+	return solana.PublicKeyFromBytes(hexutil.MustDecode(programId))
 }

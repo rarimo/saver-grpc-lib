@@ -26,27 +26,27 @@ func NewCatchupper(rarimo *grpc.ClientConn, voter *Voter, log *logan.Entry) *Cat
 	}
 }
 
-func (o *Catchupper) Run() {
+func (c *Catchupper) Run(ctx context.Context) {
 	var nextKey []byte
 
 	for {
-		operations, err := rarimotypes.NewQueryClient(o.rarimo).OperationAll(context.TODO(), &rarimotypes.QueryAllOperationRequest{Pagination: &query.PageRequest{Key: nextKey}})
+		operations, err := rarimotypes.NewQueryClient(c.rarimo).OperationAll(context.TODO(), &rarimotypes.QueryAllOperationRequest{Pagination: &query.PageRequest{Key: nextKey}})
 		if err != nil {
 			panic(err)
 		}
 
 		for _, op := range operations.Operation {
 			if !op.Approved {
-				o.log.Infof("New unapproved operation found index=%s", op.Index)
+				c.log.Infof("New unapproved operation found index=%s", op.Index)
 
-				_, err := rarimotypes.NewQueryClient(o.rarimo).Vote(context.TODO(), &rarimotypes.QueryGetVoteRequest{Operation: op.Index, Validator: o.voter.Sender()})
+				_, err := rarimotypes.NewQueryClient(c.rarimo).Vote(ctx, &rarimotypes.QueryGetVoteRequest{Operation: op.Index, Validator: c.voter.Sender()})
 				if err == nil {
-					o.log.Infof("Operation already voted, index=%s", op.Index)
+					c.log.Infof("Operation already voted, index=%s", op.Index)
 					continue
 				}
 
-				if err := o.voter.Process(context.TODO(), op); err != nil {
-					panic(errors.Wrap(err, "failed to process operation", map[string]interface{}{
+				if err := c.voter.Process(ctx, op); err != nil {
+					panic(errors.Wrap(err, "failed to process operation", logan.F{
 						"index": op.Index,
 					}))
 				}
