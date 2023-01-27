@@ -38,6 +38,8 @@ func (v *Voter) Process(ctx context.Context, operation rarimotypes.Operation) er
 			return nil
 		}
 
+		v.log.Infof("Verification result for operation %s %s", operation.Index, result.String())
+
 		vote := &rarimotypes.MsgVote{
 			Creator:   v.broadcaster.Sender(),
 			Operation: operation.Index,
