@@ -27,6 +27,9 @@ func NewCatchupper(rarimo *grpc.ClientConn, voter *Voter, log *logan.Entry) *Cat
 }
 
 func (c *Catchupper) Run(ctx context.Context) {
+	c.log.Infof("Starting catchup unvoted operations")
+	defer c.log.Infof("Finishing catchup unvoted operations")
+
 	var nextKey []byte
 
 	for {

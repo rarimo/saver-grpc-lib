@@ -51,6 +51,8 @@ func (s *Subscriber) Run(ctx context.Context) {
 }
 
 func (s *Subscriber) runner(ctx context.Context) {
+	s.log.Infof("Starting subscription for the new unvoted operations")
+
 	out, err := s.client.Subscribe(ctx, OpServiceName, s.query, OpPoolSize)
 	if err != nil {
 		panic(err)
