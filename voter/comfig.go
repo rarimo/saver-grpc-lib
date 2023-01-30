@@ -1,11 +1,12 @@
 package voter
 
 import (
+	"time"
+
 	"gitlab.com/distributed_lab/figure"
 	"gitlab.com/distributed_lab/kit/comfig"
 	"gitlab.com/distributed_lab/kit/kv"
 	"gitlab.com/distributed_lab/logan/v3/errors"
-	"time"
 )
 
 type SubscriberConfig struct {
@@ -15,6 +16,12 @@ type SubscriberConfig struct {
 
 type Subscriberer interface {
 	Subscriber() SubscriberConfig
+}
+
+func NewSubscriberer(getter kv.Getter) Subscriberer {
+	return &subscriberer{
+		getter: getter,
+	}
 }
 
 type subscriberer struct {
