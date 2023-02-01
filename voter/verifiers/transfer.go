@@ -5,6 +5,7 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"gitlab.com/distributed_lab/logan/v3"
+	"gitlab.com/distributed_lab/logan/v3/errors"
 	rarimotypes "gitlab.com/rarimo/rarimo-core/x/rarimocore/types"
 	"gitlab.com/rarimo/savers/saver-grpc-lib/voter"
 )
@@ -47,7 +48,7 @@ func (t *TransferVerifier) Verify(operation rarimotypes.Operation) (rarimotypes.
 	}
 
 	if err := t.VerifyTransfer(transfer.Tx, transfer.EventId, transfer); err != nil {
-		switch err {
+		switch errors.Cause(err) {
 		case ErrUnsupportedNetwork:
 			return rarimotypes.VoteType_NO, ErrUnsupportedNetwork
 		case ErrWrongOperationContent:
