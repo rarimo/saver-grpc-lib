@@ -79,6 +79,20 @@ func MustVerifyTokenSeed(bridgeContract, tokenSeed string) bool {
 	return err == nil
 }
 
+func MustGetPDA(bridgeContract, tokenSeed string) string {
+	seed, err := hexutil.Decode(tokenSeed)
+	if err != nil {
+		return ""
+	}
+
+	key, _, err := solana.FindProgramAddress([][]byte{seed}, MustPublicKeyFromHexStr(bridgeContract))
+	if err != nil {
+		return ""
+	}
+
+	return hexutil.Encode(key.Bytes())
+}
+
 func MustPublicKeyFromHexStr(programId string) solana.PublicKey {
 	return solana.PublicKeyFromBytes(hexutil.MustDecode(programId))
 }
