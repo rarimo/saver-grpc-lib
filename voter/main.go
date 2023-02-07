@@ -9,7 +9,7 @@ import (
 )
 
 type Verifier interface {
-	Verify(operation rarimotypes.Operation) (rarimotypes.VoteType, error)
+	Verify(ctx context.Context, operation rarimotypes.Operation) (rarimotypes.VoteType, error)
 }
 
 type Voter struct {
@@ -32,7 +32,7 @@ func (v *Voter) Process(ctx context.Context, operation rarimotypes.Operation) er
 	if verifier, ok := v.verifiers[operation.OperationType]; ok {
 		v.log.Infof("Found verifier for op type: %s", operation.OperationType.String())
 
-		result, err := verifier.Verify(operation)
+		result, err := verifier.Verify(ctx, operation)
 		if err != nil {
 			v.log.WithError(err).Errorf("Verification failed for operation: %s", operation.Index)
 			return nil

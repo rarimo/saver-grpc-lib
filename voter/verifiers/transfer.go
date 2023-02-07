@@ -1,6 +1,7 @@
 package verifiers
 
 import (
+	"context"
 	goerr "errors"
 
 	"github.com/gogo/protobuf/proto"
@@ -19,25 +20,25 @@ var (
 // TransferOperator implements logic for transfer generation on every chain. Every saver should
 // implement it based on its chain peculiarities
 type TransferOperator interface {
-	VerifyTransfer(tx, eventId string, transfer *rarimotypes.Transfer) error
+	VerifyTransfer(ctx context.Context, tx, eventId string, transfer *rarimotypes.Transfer) error
 }
 
 type TransferVerifier struct {
-	TransferOperator
-	log *logan.Entry
+	operator TransferOperator
+	log      *logan.Entry
 }
 
-func NewTransferVerifier(operator TransferOperator, log *logan.Entry) voter.Verifier {
+func NewTransferVerifier(operator TransferOperator, log *logan.Entry) *TransferVerifier {
 	return &TransferVerifier{
-		TransferOperator: operator,
-		log:              log,
+		operator: operator,
+		log:      log,
 	}
 }
 
 // Implements Verifier
 var _ voter.Verifier = &TransferVerifier{}
 
-func (t *TransferVerifier) Verify(operation rarimotypes.Operation) (rarimotypes.VoteType, error) {
+func (t *TransferVerifier) Verify(ctx context.Context, operation rarimotypes.Operation) (rarimotypes.VoteType, error) {
 	if operation.OperationType != rarimotypes.OpType_TRANSFER {
 		return rarimotypes.VoteType_NO, ErrInvalidOperationType
 	}
@@ -47,7 +48,7 @@ func (t *TransferVerifier) Verify(operation rarimotypes.Operation) (rarimotypes.
 		return rarimotypes.VoteType_NO, err
 	}
 
-	if err := t.VerifyTransfer(transfer.Tx, transfer.EventId, transfer); err != nil {
+	if err := t.operator.VerifyTransfer(ctx, transfer.Tx, transfer.EventId, transfer); err != nil {
 		switch errors.Cause(err) {
 		case ErrUnsupportedNetwork:
 			return rarimotypes.VoteType_NO, ErrUnsupportedNetwork
