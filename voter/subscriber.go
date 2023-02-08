@@ -3,6 +3,7 @@ package voter
 import (
 	"context"
 	"fmt"
+
 	"gitlab.com/distributed_lab/logan/v3/errors"
 	"gitlab.com/distributed_lab/running"
 
@@ -107,11 +108,13 @@ func (s *Subscriber) runOnce(ctx context.Context) error {
 				continue
 			}
 
-			if err := s.voter.Process(ctx, op.Operation); err != nil {
-				s.log.
-					WithError(err).
-					WithFields(logan.F{"index": index}).
-					Errorf("failed to process operation")
+			if op.Operation.Status == rarimotypes.OpStatus_INITIALIZED {
+				if err := s.voter.Process(ctx, op.Operation); err != nil {
+					s.log.
+						WithError(err).
+						WithFields(logan.F{"index": index}).
+						Errorf("failed to process operation")
+				}
 			}
 		}
 	}
