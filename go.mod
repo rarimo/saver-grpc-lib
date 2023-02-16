@@ -11,6 +11,7 @@ require (
 	gitlab.com/distributed_lab/figure v2.1.0+incompatible
 	gitlab.com/distributed_lab/kit v1.11.1
 	gitlab.com/distributed_lab/logan v3.8.1+incompatible
+	gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c
 	gitlab.com/rarimo/broadcaster-svc v0.0.0-20221130133449-dfacd1486515
 	gitlab.com/rarimo/rarimo-core v0.0.0-20230203123832-78dfff3d1842
 	google.golang.org/grpc v1.51.0
@@ -125,7 +126,6 @@ require (
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/zondax/hid v0.9.1-0.20220302062450-5552068d2266 // indirect
-	gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c // indirect
 	go.etcd.io/bbolt v1.3.6 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect

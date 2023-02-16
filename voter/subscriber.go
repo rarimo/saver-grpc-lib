@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/tendermint/tendermint/rpc/client/http"
+	coretypes "github.com/tendermint/tendermint/rpc/core/types"
+	"gitlab.com/distributed_lab/logan/v3"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 	"gitlab.com/distributed_lab/running"
-
-	"github.com/tendermint/tendermint/rpc/client/http"
-	"gitlab.com/distributed_lab/logan/v3"
 	rarimo "gitlab.com/rarimo/rarimo-core/x/rarimocore/types"
 	rarimotypes "gitlab.com/rarimo/rarimo-core/x/rarimocore/types"
 	"google.golang.org/grpc"
@@ -91,31 +91,45 @@ func (s *Subscriber) runOnce(ctx context.Context) error {
 	}
 
 	queryClient := rarimotypes.NewQueryClient(s.rarimo)
-	for {
-		c := <-out
 
-		for _, index := range c.Events[fmt.Sprintf("%s.%s", rarimo.EventTypeNewOperation, rarimo.AttributeKeyOperationId)] {
+	eventData := readOneEvent(out)
+	if eventData == nil {
+		s.log.Info("no events to process, sleeping")
+		return nil
+	}
+
+	for _, index := range eventData.Events[fmt.Sprintf("%s.%s", rarimo.EventTypeNewOperation, rarimo.AttributeKeyOperationId)] {
+		s.log.
+			WithFields(logan.F{"index": index}).
+			Info("New operation found")
+
+		op, err := queryClient.Operation(ctx, &rarimotypes.QueryGetOperationRequest{Index: index})
+		if err != nil {
 			s.log.
+				WithError(err).
 				WithFields(logan.F{"index": index}).
-				Info("New operation found")
+				Errorf("failed to fetch operation data")
+			continue
+		}
 
-			op, err := queryClient.Operation(ctx, &rarimotypes.QueryGetOperationRequest{Index: index})
-			if err != nil {
+		if op.Operation.Status == rarimotypes.OpStatus_INITIALIZED {
+			if err := s.voter.Process(ctx, op.Operation); err != nil {
 				s.log.
 					WithError(err).
 					WithFields(logan.F{"index": index}).
-					Errorf("failed to fetch operation data")
-				continue
-			}
-
-			if op.Operation.Status == rarimotypes.OpStatus_INITIALIZED {
-				if err := s.voter.Process(ctx, op.Operation); err != nil {
-					s.log.
-						WithError(err).
-						WithFields(logan.F{"index": index}).
-						Errorf("failed to process operation")
-				}
+					Errorf("failed to process operation")
 			}
 		}
+	}
+
+	return nil
+}
+
+func readOneEvent(from <-chan coretypes.ResultEvent) *coretypes.ResultEvent {
+	select {
+	case e := <-from:
+		return &e
+	default:
+		return nil
 	}
 }
