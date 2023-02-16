@@ -3,6 +3,7 @@ package voter
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/tendermint/tendermint/rpc/client/http"
 	coretypes "github.com/tendermint/tendermint/rpc/core/types"
@@ -76,45 +77,47 @@ func (s *Subscriber) runOnce(ctx context.Context) error {
 
 	queryClient := rarimotypes.NewQueryClient(s.rarimo)
 
-	eventData := readOneEvent(out)
-	if eventData == nil {
-		s.log.Debug("no events to process, sleeping")
-		return nil
-	}
+	for {
+		eventData := readOneEvent(out, 10*time.Second)
+		if eventData == nil {
+			s.log.Debug("no events to process, resubscribing")
+			return nil
+		}
 
-	for _, index := range eventData.Events[fmt.Sprintf("%s.%s", rarimo.EventTypeNewOperation, rarimo.AttributeKeyOperationId)] {
-		s.log.
-			WithFields(logan.F{"index": index}).
-			Info("New operation found")
-
-		op, err := queryClient.Operation(ctx, &rarimotypes.QueryGetOperationRequest{Index: index})
-		if err != nil {
+		for _, index := range eventData.Events[fmt.Sprintf("%s.%s", rarimo.EventTypeNewOperation, rarimo.AttributeKeyOperationId)] {
 			s.log.
-				WithError(err).
 				WithFields(logan.F{"index": index}).
-				Errorf("failed to fetch operation data")
-			continue
-		}
+				Info("New operation found")
 
-		if op.Operation.Status != rarimotypes.OpStatus_INITIALIZED {
-			continue
-		}
+			op, err := queryClient.Operation(ctx, &rarimotypes.QueryGetOperationRequest{Index: index})
+			if err != nil {
+				s.log.
+					WithError(err).
+					WithFields(logan.F{"index": index}).
+					Errorf("failed to fetch operation data")
+				continue
+			}
 
-		if err := s.voter.Process(ctx, op.Operation); err != nil {
-			s.log.
-				WithError(err).
-				WithFields(logan.F{"index": index}).
-				Errorf("failed to process operation")
+			if op.Operation.Status != rarimotypes.OpStatus_INITIALIZED {
+				continue
+			}
+
+			if err := s.voter.Process(ctx, op.Operation); err != nil {
+				s.log.
+					WithError(err).
+					WithFields(logan.F{"index": index}).
+					Errorf("failed to process operation")
+			}
 		}
 	}
-
-	return nil
 }
 
-func readOneEvent(from <-chan coretypes.ResultEvent) *coretypes.ResultEvent {
+func readOneEvent(from <-chan coretypes.ResultEvent, timeout time.Duration) *coretypes.ResultEvent {
 	select {
 	case e := <-from:
 		return &e
+	case <-time.NewTicker(timeout).C:
+		return nil
 	default:
 		return nil
 	}
