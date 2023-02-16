@@ -116,7 +116,7 @@ func readOneEvent(from <-chan coretypes.ResultEvent, timeout time.Duration) *cor
 	select {
 	case e := <-from:
 		return &e
-	case <-time.NewTicker(timeout).C:
+	case <-time.NewTimer(timeout).C:
 		return nil
 	default:
 		return nil
