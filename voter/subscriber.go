@@ -53,27 +53,11 @@ func (s *Subscriber) Run(ctx context.Context) {
 		}
 	}()
 
-	for {
-		if ctx.Err() != nil {
-			s.log.Info("context signaled to stop")
-			return
-		}
-
-		running.UntilSuccess(ctx, s.log.WithField("who", "subscriber"), "subscription_runner", func(ctx context.Context) (bool, error) {
-			err := s.runOnce(ctx)
-			if err != nil {
-				switch err {
-				case context.DeadlineExceeded, context.Canceled:
-					return false, nil
-				default:
-					s.cleanup()
-					return false, err
-				}
-			}
-
-			return true, nil
-		}, s.cfg.MinRetryPeriod, s.cfg.MaxRetryPeriod)
-	}
+	running.WithBackOff(ctx,
+		s.log.WithField("who", "subscriber"),
+		"subscriber",
+		s.runOnce,
+		s.cfg.MinRetryPeriod, s.cfg.MinRetryPeriod, s.cfg.MaxRetryPeriod)
 }
 
 func (s *Subscriber) cleanup() {
@@ -94,7 +78,7 @@ func (s *Subscriber) runOnce(ctx context.Context) error {
 
 	eventData := readOneEvent(out)
 	if eventData == nil {
-		s.log.Info("no events to process, sleeping")
+		s.log.Debug("no events to process, sleeping")
 		return nil
 	}
 
@@ -112,13 +96,15 @@ func (s *Subscriber) runOnce(ctx context.Context) error {
 			continue
 		}
 
-		if op.Operation.Status == rarimotypes.OpStatus_INITIALIZED {
-			if err := s.voter.Process(ctx, op.Operation); err != nil {
-				s.log.
-					WithError(err).
-					WithFields(logan.F{"index": index}).
-					Errorf("failed to process operation")
-			}
+		if op.Operation.Status != rarimotypes.OpStatus_INITIALIZED {
+			continue
+		}
+
+		if err := s.voter.Process(ctx, op.Operation); err != nil {
+			s.log.
+				WithError(err).
+				WithFields(logan.F{"index": index}).
+				Errorf("failed to process operation")
 		}
 	}
 
