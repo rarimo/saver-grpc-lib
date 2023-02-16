@@ -118,7 +118,5 @@ func readOneEvent(from <-chan coretypes.ResultEvent, timeout time.Duration) *cor
 		return &e
 	case <-time.NewTimer(timeout).C:
 		return nil
-	default:
-		return nil
 	}
 }
