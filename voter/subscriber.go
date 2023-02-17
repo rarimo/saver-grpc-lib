@@ -79,8 +79,8 @@ func (s *Subscriber) runOnce(ctx context.Context) error {
 	for {
 		eventData := readOneEvent(ctx, out)
 		if eventData == nil {
-			s.log.Debug("no events to process, sleeping")
-			continue
+			s.log.Debug("context canceled, exiting")
+			return nil
 		}
 
 		for _, index := range eventData.Events[fmt.Sprintf("%s.%s", rarimo.EventTypeNewOperation, rarimo.AttributeKeyOperationId)] {
