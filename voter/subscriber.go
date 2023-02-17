@@ -78,10 +78,10 @@ func (s *Subscriber) runOnce(ctx context.Context) error {
 	queryClient := rarimotypes.NewQueryClient(s.rarimo)
 
 	for {
-		eventData := readOneEvent(ctx, out, 10*time.Second)
+		eventData := readOneEvent(ctx, out, 1*time.Minute)
 		if eventData == nil {
-			s.log.Debug("no events to process, resubscribing")
-			return nil
+			s.log.Debug("no events to process, sleeping")
+			continue
 		}
 
 		for _, index := range eventData.Events[fmt.Sprintf("%s.%s", rarimo.EventTypeNewOperation, rarimo.AttributeKeyOperationId)] {
