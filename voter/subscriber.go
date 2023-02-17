@@ -3,7 +3,6 @@ package voter
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/tendermint/tendermint/rpc/client/http"
 	coretypes "github.com/tendermint/tendermint/rpc/core/types"
@@ -78,7 +77,7 @@ func (s *Subscriber) runOnce(ctx context.Context) error {
 	queryClient := rarimotypes.NewQueryClient(s.rarimo)
 
 	for {
-		eventData := readOneEvent(ctx, out, 1*time.Minute)
+		eventData := readOneEvent(ctx, out)
 		if eventData == nil {
 			s.log.Debug("no events to process, sleeping")
 			continue
@@ -112,13 +111,11 @@ func (s *Subscriber) runOnce(ctx context.Context) error {
 	}
 }
 
-func readOneEvent(ctx context.Context, from <-chan coretypes.ResultEvent, timeout time.Duration) *coretypes.ResultEvent {
+func readOneEvent(ctx context.Context, from <-chan coretypes.ResultEvent) *coretypes.ResultEvent {
 	select {
 	case <-ctx.Done():
 		return nil
 	case e := <-from:
 		return &e
-	case <-time.NewTimer(timeout).C:
-		return nil
 	}
 }
