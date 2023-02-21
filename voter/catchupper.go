@@ -28,7 +28,6 @@ func NewCatchupper(rarimo *grpc.ClientConn, voter *Voter, log *logan.Entry) *Cat
 
 func (c *Catchupper) Run(ctx context.Context) {
 	c.log.Infof("Starting catchup unvoted operations")
-	defer c.log.Infof("Finishing catchup unvoted operations")
 
 	var nextKey []byte
 
@@ -68,6 +67,7 @@ func (c *Catchupper) Run(ctx context.Context) {
 
 		nextKey = operations.Pagination.NextKey
 		if nextKey == nil {
+			c.log.Infof("Finished catchup unvoted operations")
 			return
 		}
 	}
