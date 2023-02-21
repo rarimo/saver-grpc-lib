@@ -12,17 +12,17 @@ import (
 
 // Catchupper catches up old unsigned operations from core.
 type Catchupper struct {
-	rarimo *grpc.ClientConn
-	voter  *Voter
-	log    *logan.Entry
+	rarimoClient rarimotypes.QueryClient
+	voter        *Voter
+	log          *logan.Entry
 }
 
 // NewCatchupper creates the catchup instance for adding all unsigned operations to the pool
 func NewCatchupper(rarimo *grpc.ClientConn, voter *Voter, log *logan.Entry) *Catchupper {
 	return &Catchupper{
-		rarimo: rarimo,
-		voter:  voter,
-		log:    log,
+		rarimoClient: rarimotypes.NewQueryClient(rarimo),
+		voter:        voter,
+		log:          log,
 	}
 }
 
@@ -33,26 +33,36 @@ func (c *Catchupper) Run(ctx context.Context) {
 	var nextKey []byte
 
 	for {
-		operations, err := rarimotypes.NewQueryClient(c.rarimo).OperationAll(context.TODO(), &rarimotypes.QueryAllOperationRequest{Pagination: &query.PageRequest{Key: nextKey}})
+		operations, err := c.rarimoClient.OperationAll(ctx, &rarimotypes.QueryAllOperationRequest{
+			Pagination: &query.PageRequest{
+				Key: nextKey,
+			},
+		})
 		if err != nil {
-			panic(err)
+			panic(errors.Wrap(err, "failed to get operations"))
 		}
 
 		for _, op := range operations.Operation {
-			if op.Status == rarimotypes.OpStatus_INITIALIZED {
-				c.log.Infof("New unapproved operation found index=%s", op.Index)
+			if op.Status != rarimotypes.OpStatus_INITIALIZED {
+				continue
+			}
 
-				_, err := rarimotypes.NewQueryClient(c.rarimo).Vote(ctx, &rarimotypes.QueryGetVoteRequest{Operation: op.Index, Validator: c.voter.Sender()})
-				if err == nil {
-					c.log.Infof("Operation already voted, index=%s", op.Index)
-					continue
-				}
+			c.log.WithField("index", op.Index).Info("New unapproved operation found")
 
-				if err := c.voter.Process(ctx, op); err != nil {
-					panic(errors.Wrap(err, "failed to process operation", logan.F{
-						"index": op.Index,
-					}))
-				}
+			_, err := c.rarimoClient.Vote(ctx, &rarimotypes.QueryGetVoteRequest{
+				Operation: op.Index,
+				Validator: c.voter.Sender(),
+			})
+
+			if err == nil {
+				c.log.WithField("index", op.Index).Info("Operation already voted")
+				continue
+			}
+
+			if err := c.voter.Process(ctx, op); err != nil {
+				panic(errors.Wrap(err, "failed to process operation", logan.F{
+					"index": op.Index,
+				}))
 			}
 		}
 
