@@ -13,7 +13,7 @@ require (
 	gitlab.com/distributed_lab/logan v3.8.1+incompatible
 	gitlab.com/distributed_lab/running v0.0.0-20200706131153-4af0e83eb96c
 	gitlab.com/rarimo/broadcaster-svc v0.0.0-20221130133449-dfacd1486515
-	gitlab.com/rarimo/rarimo-core v0.0.0-20230314122626-215d622be7f4
+	gitlab.com/rarimo/rarimo-core v0.0.0-20230314163607-be633db74abc
 	google.golang.org/grpc v1.53.0
 )
 
