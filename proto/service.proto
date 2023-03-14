@@ -3,42 +3,13 @@ syntax = "proto3";
 option go_package = "gitlab.com/rarimo/savers/saver-grpc-lib/grpc";
 
 service Saver {
-  rpc GetDepositInfo(MsgTransactionInfoRequest) returns (MsgDepositResponse);
-  rpc GetWithdrawInfo(MsgTransactionInfoRequest) returns (MsgWithdrawResponse);
+  rpc Revote(RevoteRequest) returns (RevoteResponse);
 }
 
-message MsgTransactionInfoRequest {
-  string hash = 1;
-  string eventId = 2;
-  // Every service should define that type by itself
-  uint32 type = 3;
+message RevoteRequest {
+  string operation = 1;
 }
 
-message MsgDepositResponse {
-  string targetNetwork = 1;
-  // hex-encoded
-  string sender = 2;
-  // hex-encoded
-  string receiver = 3;
-  // dec-encoded
-  string amount = 4;
-  // hex-encoded
-  string tokenAddress = 6;
-  // hex-encoded
-  string tokenId = 7;
-  // hex-encoded
-  string bundleData = 8;
-  // hex-encoded
-  string bundleSalt = 9;
-}
-
-message MsgWithdrawResponse {
-  string tx = 1;
-  string eventId = 2;
-  string networkFrom = 3;
-  string receiver = 4;
-  // dec-encoded
-  string amount = 5;
-  string tokenAddress = 6;
-  string tokenId = 7;
+message RevoteResponse {
+  string result = 2;
 }
