@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"gitlab.com/distributed_lab/logan/v3"
+	oracletypes "gitlab.com/rarimo/rarimo-core/x/oraclemanager/types"
 	rarimotypes "gitlab.com/rarimo/rarimo-core/x/rarimocore/types"
 	"gitlab.com/rarimo/savers/saver-grpc-lib/broadcaster"
 )
@@ -15,13 +16,15 @@ type Verifier interface {
 type Voter struct {
 	verifiers   map[rarimotypes.OpType]Verifier
 	broadcaster broadcaster.Broadcaster
+	chain       string
 	log         *logan.Entry
 }
 
-func NewVoter(log *logan.Entry, broadcaster broadcaster.Broadcaster, verifiers map[rarimotypes.OpType]Verifier) *Voter {
+func NewVoter(chain string, log *logan.Entry, broadcaster broadcaster.Broadcaster, verifiers map[rarimotypes.OpType]Verifier) *Voter {
 	return &Voter{
 		verifiers:   verifiers,
 		broadcaster: broadcaster,
+		chain:       chain,
 		log:         log,
 	}
 }
@@ -40,8 +43,11 @@ func (v *Voter) Process(ctx context.Context, operation rarimotypes.Operation) er
 
 		v.log.Infof("Verification result for operation %s %s", operation.Index, result.String())
 
-		vote := &rarimotypes.MsgVote{
-			Creator:   v.broadcaster.Sender(),
+		vote := &oracletypes.MsgVote{
+			Index: &oracletypes.OracleIndex{
+				Chain:   v.chain,
+				Account: v.broadcaster.Sender(),
+			},
 			Operation: operation.Index,
 			Vote:      result,
 		}
