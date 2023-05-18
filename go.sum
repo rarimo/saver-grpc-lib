@@ -902,8 +902,6 @@ gitlab.com/rarimo/broadcaster-svc v0.0.0-20221130133449-dfacd1486515 h1:TNIHf2/5
 gitlab.com/rarimo/broadcaster-svc v0.0.0-20221130133449-dfacd1486515/go.mod h1:dqIQPbo4EaIofCrTiv97IUGxLtq9IJkLecuBpdRErIY=
 gitlab.com/rarimo/cosmos-sdk v0.45.5-dev.5 h1:foaMTCaZPafTGsvWSZwHQQf2WebdhKAnwNBaW4b5hGQ=
 gitlab.com/rarimo/cosmos-sdk v0.45.5-dev.5/go.mod h1:WOqtDxN3eCCmnYLVla10xG7lEXkFjpTaqm2a2WasgCc=
-gitlab.com/rarimo/rarimo-core v0.0.0-20230314122626-215d622be7f4 h1:om8DSsODaqObUvkaYUmfw9cxWXsUzw0AfN+SPN+BSWY=
-gitlab.com/rarimo/rarimo-core v0.0.0-20230314122626-215d622be7f4/go.mod h1:fzYe919oPPRDRTE+0wngDRUnv0C3DlVooyBuS+vhV6E=
 gitlab.com/rarimo/rarimo-core v0.0.0-20230314163607-be633db74abc h1:gyo4eX3qPjKYDlg5wKvMBC4ffpzwlw+3ojzuSMsFMU8=
 gitlab.com/rarimo/rarimo-core v0.0.0-20230314163607-be633db74abc/go.mod h1:fzYe919oPPRDRTE+0wngDRUnv0C3DlVooyBuS+vhV6E=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
