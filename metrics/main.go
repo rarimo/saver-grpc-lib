@@ -10,9 +10,14 @@ import (
 )
 
 const (
-	WebsocketAvailable    = 0
-	WebsocketDisconnected = 1
+	WebsocketAvailable    = 1
+	WebsocketDisconnected = 0
 )
+
+type Profiler struct {
+	Enabled bool   `fig:"enabled"`
+	Addr    string `fig:"addr"`
+}
 
 var (
 	WebsocketMetric = promauto.NewGauge(prometheus.GaugeOpts{
@@ -20,11 +25,13 @@ var (
 	})
 )
 
-func RunProfiling() {
-	go profiling()
+func (p *Profiler) RunProfiling() {
+	if p.Enabled {
+		go p.profiling()
+	}
 }
 
-func profiling() {
+func (p *Profiler) profiling() {
 	r := http.NewServeMux()
 	r.HandleFunc("/debug/pprof/", pprof.Index)
 	r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
@@ -33,7 +40,7 @@ func profiling() {
 	r.HandleFunc("/debug/pprof/trace", pprof.Trace)
 	r.Handle("/metrics", promhttp.Handler())
 
-	if err := http.ListenAndServe(":8080", r); err != nil {
+	if err := http.ListenAndServe(p.Addr, r); err != nil {
 		panic(err)
 	}
 }
