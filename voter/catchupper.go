@@ -59,9 +59,7 @@ func (c *Catchupper) Run(ctx context.Context) {
 			}
 
 			if err := c.voter.Process(ctx, op); err != nil {
-				panic(errors.Wrap(err, "failed to process operation", logan.F{
-					"index": op.Index,
-				}))
+				c.log.WithError(err).WithField("index", op.Index).Error("failed to process operation")
 			}
 		}
 
