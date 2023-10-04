@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/cosmos/cosmos-sdk/types/query"
+	rarimotypes "github.com/rarimo/rarimo-core/x/rarimocore/types"
 	"gitlab.com/distributed_lab/logan/v3"
 	"gitlab.com/distributed_lab/logan/v3/errors"
-	rarimotypes "gitlab.com/rarimo/rarimo-core/x/rarimocore/types"
 	"google.golang.org/grpc"
 )
 

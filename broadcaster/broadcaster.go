@@ -5,7 +5,7 @@ import (
 
 	sdkclient "github.com/cosmos/cosmos-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	broadcasterclient "gitlab.com/rarimo/broadcaster-svc/grpc"
+	broadcasterclient "github.com/rarimo/broadcaster-svc/grpc"
 )
 
 type broadcaster struct {

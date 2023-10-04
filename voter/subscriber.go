@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 
+	rarimo "github.com/rarimo/rarimo-core/x/rarimocore/types"
+	rarimotypes "github.com/rarimo/rarimo-core/x/rarimocore/types"
 	"github.com/tendermint/tendermint/rpc/client/http"
 	coretypes "github.com/tendermint/tendermint/rpc/core/types"
 	"gitlab.com/distributed_lab/logan/v3"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 	"gitlab.com/distributed_lab/running"
-	rarimo "gitlab.com/rarimo/rarimo-core/x/rarimocore/types"
-	rarimotypes "gitlab.com/rarimo/rarimo-core/x/rarimocore/types"
 	"google.golang.org/grpc"
 )
 

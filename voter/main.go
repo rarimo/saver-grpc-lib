@@ -3,10 +3,10 @@ package voter
 import (
 	"context"
 
+	oracletypes "github.com/rarimo/rarimo-core/x/oraclemanager/types"
+	rarimotypes "github.com/rarimo/rarimo-core/x/rarimocore/types"
+	"github.com/rarimo/saver-grpc-lib/broadcaster"
 	"gitlab.com/distributed_lab/logan/v3"
-	oracletypes "gitlab.com/rarimo/rarimo-core/x/oraclemanager/types"
-	rarimotypes "gitlab.com/rarimo/rarimo-core/x/rarimocore/types"
-	"gitlab.com/rarimo/savers/saver-grpc-lib/broadcaster"
 )
 
 type Verifier interface {

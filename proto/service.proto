@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "gitlab.com/rarimo/savers/saver-grpc-lib/grpc";
+option go_package = "github.com/rarimo/saver-grpc-lib/grpc";
 
 service Saver {
   rpc Revote(RevoteRequest) returns (RevoteResponse);

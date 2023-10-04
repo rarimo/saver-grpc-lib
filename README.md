@@ -23,13 +23,13 @@ This lib contains the following components:
 
 ## Voter SDK
 
-Use `gitlab.com/rarimo/savers/saver-grpc-lib/voter` package in savers to implement logic of monitoring anv voting operations.
+Use `github.com/rarimo/saver-grpc-lib/voter` package in savers to implement logic of monitoring anv voting operations.
 
 The `voter.Voter` structure implements the common logic of verifying and voting for the certain operation. 
 It uses `voter.IVerifier`component to verify operation of the certain types. Mapping with `rarimotypes.OpType => IVerifier` 
 correspondence definition should be provided into the `voter.NewVoter` constructor. 
 
-The `gitlab.com/rarimo/savers/saver-grpc-lib/voter/verifiers` package provides common logic of already designed IVerifiers. 
+The `github.com/rarimo/saver-grpc-lib/voter/verifiers` package provides common logic of already designed IVerifiers. 
 
 The `verifiers.TransferVerifier` implements logic for verifying transfer operations. All savers should also implement  
 `verifiers.ITransferOperator` that injects custom chain logic into `verifiers.TransferVerifier` to verify operation. 
@@ -38,3 +38,6 @@ The `verifiers.TransferVerifier` implements logic for verifying transfer operati
 
 Grpc package defines only one entrypoint `Revote` that should be used to trigger re-verifying and re-voting for the 
 certain operation.
+
+## License
+[MIT](./LICENSE.md)
