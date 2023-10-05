@@ -40,4 +40,4 @@ Grpc package defines only one entrypoint `Revote` that should be used to trigger
 certain operation.
 
 ## License
-[MIT](./LICENSE.md)
+[MIT](./LICENSE)
